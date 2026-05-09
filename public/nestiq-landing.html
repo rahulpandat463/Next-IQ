@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NestIQ — Delhi NCR's AI Property Advisor</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --brand: #1D9E75;
+      --brand-dark: #0F6E56;
+      --brand-light: #E1F5EE;
+      --text-dark: #2C2C2A;
+      --text-mid: #5F5E5A;
+      --text-light: #888780;
+      --bg: #fafaf8;
+      --white: #ffffff;
+      --border: rgba(0,0,0,0.1);
+      --radius: 12px;
+    }
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      color: var(--text-dark);
+      background: var(--bg);
+    }
+
+    /* ── NAV ── */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      background: white;
+      border-bottom: 0.5px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .logo {
+      font-family: Georgia, serif;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--text-dark);
+      letter-spacing: -0.5px;
+    }
+    .logo span { color: var(--brand); }
+    .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+    .nav-links a { text-decoration: none; color: var(--text-mid); font-size: 0.9rem; transition: color 0.15s; }
+    .nav-links a:hover { color: var(--brand); }
+    .nav-cta {
+      background: var(--brand);
+      color: white;
+      border: none;
+      padding: 9px 20px;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .nav-cta:hover { background: var(--brand-dark); }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, #085041 0%, #1D9E75 60%, #5DCAA5 100%);
+      padding: 5rem 2rem 6rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -80px; right: -80px;
+      width: 350px; height: 350px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.05);
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -100px; left: -60px;
+      width: 280px; height: 280px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+    }
+    .hero-tag {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      color: white;
+      font-size: 0.72rem;
+      padding: 4px 14px;
+      border-radius: 20px;
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      font-weight: 600;
+      position: relative;
+      z-index: 1;
+    }
+    .hero h1 {
+      font-family: Georgia, serif;
+      font-size: 3rem;
+      color: white;
+      line-height: 1.15;
+      margin-bottom: 1.2rem;
+      font-weight: normal;
+      position: relative;
+      z-index: 1;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .hero p {
+      font-size: 1.1rem;
+      color: rgba(255,255,255,0.82);
+      margin-bottom: 2.5rem;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.6;
+      position: relative;
+      z-index: 1;
+    }
+    .hero-btn {
+      background: white;
+      color: var(--brand-dark);
+      border: none;
+      padding: 15px 36px;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+      position: relative;
+      z-index: 1;
+    }
+    .hero-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(0,0,0,0.18); }
+
+    /* ── STATS BAR ── */
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      padding: 1.8rem 2rem;
+      background: var(--brand-dark);
+      flex-wrap: wrap;
+    }
+    .stat { text-align: center; color: white; }
+    .stat-num { font-size: 1.5rem; font-weight: 700; font-family: Georgia, serif; }
+    .stat-lbl { font-size: 0.75rem; color: rgba(255,255,255,0.65); margin-top: 3px; }
+
+    /* ── HOW IT WORKS ── */
+    .how-section {
+      padding: 5rem 2rem;
+      text-align: center;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+    .section-tag {
+      display: inline-block;
+      background: var(--brand-light);
+      color: var(--brand-dark);
+      font-size: 0.72rem;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .how-section h2 {
+      font-family: Georgia, serif;
+      font-size: 2rem;
+      margin-bottom: 0.6rem;
+      font-weight: normal;
+    }
+    .how-section > p {
+      color: var(--text-mid);
+      margin-bottom: 3rem;
+      font-size: 1rem;
+    }
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+    }
+    .step-card {
+      background: var(--white);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem 1.5rem;
+      text-align: center;
+      transition: box-shadow 0.2s;
+    }
+    .step-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.07); }
+    .step-icon {
+      width: 52px; height: 52px;
+      background: var(--brand-light);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.2rem;
+      font-size: 22px;
+      color: var(--brand-dark);
+    }
+    .step-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .step-card p { font-size: 0.87rem; color: var(--text-mid); line-height: 1.6; }
+
+    /* ── CHAT SECTION ── */
+    .chat-section {
+      padding: 5rem 2rem;
+      background: var(--bg);
+    }
+    .chat-inner {
+      max-width: 620px;
+      margin: 0 auto;
+    }
+    .chat-inner .section-tag { display: block; text-align: center; margin-bottom: 1rem; }
+    .chat-label {
+      text-align: center;
+      font-family: Georgia, serif;
+      font-size: 1.9rem;
+      margin-bottom: 0.5rem;
+      font-weight: normal;
+    }
+    .chat-sublabel {
+      text-align: center;
+      color: var(--text-mid);
+      font-size: 0.92rem;
+      margin-bottom: 2rem;
+    }
+    .chat-box {
+      background: var(--white);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+    }
+    .chat-header {
+      background: var(--brand);
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .chat-avatar {
+      width: 36px; height: 36px;
+      background: rgba(255,255,255,0.25);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      color: white;
+    }
+    .chat-header-text { color: white; }
+    .chat-header-text strong { font-size: 0.95rem; display: block; }
+    .chat-header-text span { font-size: 0.75rem; opacity: 0.8; }
+    .online-dot {
+      width: 9px; height: 9px;
+      background: #9FE1CB;
+      border-radius: 50%;
+      margin-left: auto;
+    }
+    .chat-messages {
+      padding: 1.5rem;
+      min-height: 260px;
+      max-height: 380px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .msg { display: flex; gap: 10px; align-items: flex-end; }
+    .msg.user { flex-direction: row-reverse; }
+    .msg-bubble {
+      max-width: 72%;
+      padding: 11px 16px;
+      border-radius: 18px;
+      font-size: 0.9rem;
+      line-height: 1.55;
+    }
+    .msg.bot .msg-bubble {
+      background: var(--brand-light);
+      color: var(--brand-dark);
+      border-bottom-left-radius: 4px;
+    }
+    .msg.user .msg-bubble {
+      background: var(--brand);
+      color: white;
+      border-bottom-right-radius: 4px;
+    }
+    .msg-avatar {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      background: var(--brand-light);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px;
+      color: var(--brand-dark);
+      flex-shrink: 0;
+    }
+    .quick-replies {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 0 1.5rem 1.2rem;
+    }
+    .qr-btn {
+      background: var(--brand-light);
+      color: var(--brand-dark);
+      border: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.15s;
+    }
+    .qr-btn:hover { background: #9FE1CB; }
+    .chat-input-area {
+      border-top: 0.5px solid var(--border);
+      padding: 1rem 1.5rem;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .chat-input {
+      flex: 1;
+      border: 0.5px solid var(--border);
+      border-radius: 50px;
+      padding: 10px 18px;
+      font-size: 0.9rem;
+      outline: none;
+      background: var(--bg);
+      color: var(--text-dark);
+      transition: border-color 0.15s;
+    }
+    .chat-input:focus { border-color: var(--brand); }
+    .send-btn {
+      width: 40px; height: 40px;
+      background: var(--brand);
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: white;
+      font-size: 18px;
+      transition: background 0.15s;
+      flex-shrink: 0;
+    }
+    .send-btn:hover { background: var(--brand-dark); }
+    .typing { display: flex; gap: 5px; align-items: center; }
+    .typing span {
+      width: 7px; height: 7px;
+      background: var(--brand);
+      border-radius: 50%;
+      animation: bounce 1.2s infinite;
+      opacity: 0.6;
+    }
+    .typing span:nth-child(2) { animation-delay: 0.2s; }
+    .typing span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes bounce {
+      0%,60%,100% { transform: translateY(0); }
+      30% { transform: translateY(-6px); }
+    }
+
+    /* ── WHY NESTIQ ── */
+    .why-section {
+      padding: 5rem 2rem;
+      background: white;
+    }
+    .why-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .why-inner h2 {
+      font-family: Georgia, serif;
+      font-size: 2rem;
+      font-weight: normal;
+      margin-bottom: 0.6rem;
+    }
+    .why-inner > p { color: var(--text-mid); margin-bottom: 3rem; }
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.5rem;
+    }
+    .feature {
+      padding: 1.5rem;
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius);
+      text-align: left;
+    }
+    .feature i { font-size: 24px; color: var(--brand); margin-bottom: 0.75rem; display: block; }
+    .feature h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem; }
+    .feature p { font-size: 0.83rem; color: var(--text-mid); line-height: 1.5; }
+
+    /* ── AGENT CTA ── */
+    .agent-section {
+      padding: 5rem 2rem;
+      background: var(--brand-light);
+      text-align: center;
+    }
+    .agent-section h2 {
+      font-family: Georgia, serif;
+      font-size: 2rem;
+      font-weight: normal;
+      color: var(--brand-dark);
+      margin-bottom: 0.6rem;
+    }
+    .agent-section p {
+      color: var(--text-mid);
+      margin-bottom: 2rem;
+      font-size: 0.95rem;
+      max-width: 420px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .agent-benefits {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      margin-bottom: 2.5rem;
+    }
+    .agent-benefit { text-align: center; }
+    .agent-benefit strong { display: block; font-size: 1.4rem; color: var(--brand-dark); font-family: Georgia, serif; }
+    .agent-benefit span { font-size: 0.8rem; color: var(--text-mid); }
+    .agent-btn {
+      background: var(--brand-dark);
+      color: white;
+      border: none;
+      padding: 14px 32px;
+      border-radius: 50px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .agent-btn:hover { background: #085041; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--text-dark);
+      color: rgba(255,255,255,0.6);
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.82rem;
+    }
+    footer strong { color: white; }
+
+    /* ── HOW TO EARN ── */
+    .earn-section {
+      padding: 5rem 2rem;
+      background: var(--text-dark);
+    }
+    .earn-inner { max-width: 960px; margin: 0 auto; }
+    .earn-inner .section-tag {
+      background: rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.8);
+    }
+    .earn-inner h2 { color: white; }
+    .earn-inner > p { color: rgba(255,255,255,0.55); }
+    .earn-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+    .earn-card {
+      background: rgba(255,255,255,0.06);
+      border: 0.5px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius);
+      padding: 2rem 1.5rem;
+      position: relative;
+    }
+    .earn-card--featured {
+      border: 2px solid var(--brand);
+      background: rgba(29,158,117,0.1);
+    }
+    .earn-badge {
+      position: absolute;
+      top: -12px; left: 50%;
+      transform: translateX(-50%);
+      background: var(--brand);
+      color: white;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 4px 14px;
+      border-radius: 20px;
+      white-space: nowrap;
+      letter-spacing: 0.4px;
+    }
+    .earn-number {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--brand);
+      letter-spacing: 1px;
+      margin-bottom: 0.5rem;
+    }
+    .earn-icon {
+      font-size: 28px;
+      color: var(--brand);
+      margin-bottom: 0.75rem;
+    }
+    .earn-card h3 { color: white; font-size: 1.1rem; margin-bottom: 0.6rem; }
+    .earn-card p { color: rgba(255,255,255,0.6); font-size: 0.85rem; line-height: 1.6; margin-bottom: 1.2rem; }
+    .earn-card p strong { color: rgba(255,255,255,0.9); font-weight: 600; }
+    .earn-math { border-top: 0.5px solid rgba(255,255,255,0.1); padding-top: 1rem; display: flex; flex-direction: column; gap: 8px; }
+    .earn-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.83rem; }
+    .earn-row span { color: rgba(255,255,255,0.55); }
+    .earn-amt { color: white; font-weight: 600; }
+    .earn-row.highlight { background: rgba(29,158,117,0.15); border-radius: 6px; padding: 6px 8px; margin-top: 4px; }
+    .earn-row.highlight span { color: rgba(255,255,255,0.8); }
+    .earn-row.highlight .earn-amt { color: #9FE1CB; font-size: 0.95rem; }
+    .earn-total {
+      text-align: center;
+      background: rgba(29,158,117,0.15);
+      border: 0.5px solid var(--brand);
+      border-radius: var(--radius);
+      padding: 2rem;
+    }
+    .earn-total-label { font-size: 0.8rem; color: rgba(255,255,255,0.55); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px; }
+    .earn-total-num { font-family: Georgia, serif; font-size: 2rem; color: #9FE1CB; font-weight: normal; margin-bottom: 0.4rem; }
+    .earn-total-sub { font-size: 0.82rem; color: rgba(255,255,255,0.45); }
+
+    /* ── PRICING ── */
+    .pricing-section {
+      padding: 5rem 2rem;
+      background: var(--bg);
+    }
+    .pricing-inner { max-width: 900px; margin: 0 auto; }
+    .plans {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      align-items: start;
+      margin-bottom: 2rem;
+    }
+    .plan-card {
+      background: var(--white);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem 1.5rem;
+      position: relative;
+    }
+    .plan-card--popular {
+      border: 2px solid var(--brand);
+      transform: scale(1.03);
+    }
+    .plan-popular-badge {
+      position: absolute;
+      top: -13px; left: 50%;
+      transform: translateX(-50%);
+      background: var(--brand);
+      color: white;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 4px 14px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+    .plan-name { font-size: 0.85rem; font-weight: 700; color: var(--text-mid); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 0.75rem; }
+    .plan-price { font-family: Georgia, serif; font-size: 2.2rem; color: var(--text-dark); margin-bottom: 0.5rem; }
+    .plan-price span { font-size: 0.9rem; color: var(--text-mid); font-family: 'Helvetica Neue', sans-serif; }
+    .plan-desc { font-size: 0.83rem; color: var(--text-mid); margin-bottom: 1.5rem; line-height: 1.5; }
+    .plan-features { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 1.5rem; }
+    .plan-features li { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--text-dark); }
+    .plan-features li i { font-size: 16px; color: var(--brand); flex-shrink: 0; }
+    .plan-features li.plan-no { color: var(--text-light); }
+    .plan-features li.plan-no i { color: var(--text-light); }
+    .plan-btn {
+      width: 100%;
+      padding: 11px;
+      border-radius: 50px;
+      border: 1.5px solid var(--brand);
+      background: transparent;
+      color: var(--brand);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    .plan-btn:hover { background: var(--brand-light); }
+    .plan-btn--primary { background: var(--brand); color: white; }
+    .plan-btn--primary:hover { background: var(--brand-dark); }
+    .pricing-note {
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-mid);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .pricing-note i { color: var(--brand); font-size: 16px; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 2rem; }
+      .stats { gap: 1.5rem; }
+      nav .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Nest<span>IQ</span></div>
+  <ul class="nav-links">
+    <li><a href="#how">How it works</a></li>
+    <li><a href="#chat">Find Property</a></li>
+    <li><a href="#earn">How We Earn</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#agents">For Agents</a></li>
+  </ul>
+  <button class="nav-cta" onclick="document.getElementById('chat').scrollIntoView({behavior:'smooth'})">Find My Property</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-tag">Delhi NCR's AI Property Advisor</div>
+  <h1>Find Your Dream Property — Without the Chaos</h1>
+  <p>Tell our AI what you're looking for. We'll match you with the right property and verified agent in minutes.</p>
+  <button class="hero-btn" onclick="document.getElementById('chat').scrollIntoView({behavior:'smooth'})">Find My Property →</button>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat"><div class="stat-num">2,400+</div><div class="stat-lbl">Properties Listed</div></div>
+  <div class="stat"><div class="stat-num">850+</div><div class="stat-lbl">Happy Families</div></div>
+  <div class="stat"><div class="stat-num">120+</div><div class="stat-lbl">Verified Agents</div></div>
+  <div class="stat"><div class="stat-num">4.9★</div><div class="stat-lbl">Avg. Rating</div></div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="how-section" id="how">
+  <div class="section-tag">How it works</div>
+  <h2>AI-Powered Matching. Zero Confusion.</h2>
+  <p>Three simple steps to find your perfect property.</p>
+  <div class="steps">
+    <div class="step-card">
+      <div class="step-icon"><i class="ti ti-message-chatbot"></i></div>
+      <h3>Tell Our AI</h3>
+      <p>Answer a few quick questions about your needs, budget and preferred location.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-icon"><i class="ti ti-sparkles"></i></div>
+      <h3>Get Matched</h3>
+      <p>AI finds the best properties and verified agents tailored just for you.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-icon"><i class="ti ti-home-check"></i></div>
+      <h3>Move In</h3>
+      <p>Connect directly with your agent and close the deal — totally hassle-free.</p>
+    </div>
+  </div>
+</section>
+
+<!-- AI CHAT -->
+<section class="chat-section" id="chat">
+  <div class="chat-inner">
+    <div class="section-tag">AI Property Advisor</div>
+    <div class="chat-label">Chat with NestIQ</div>
+    <div class="chat-sublabel">Tell us what you need — it takes under 2 minutes</div>
+    <div class="chat-box">
+      <div class="chat-header">
+        <div class="chat-avatar"><i class="ti ti-home"></i></div>
+        <div class="chat-header-text">
+          <strong>NestIQ Assistant</strong>
+          <span>AI Property Advisor · Delhi NCR</span>
+        </div>
+        <div class="online-dot"></div>
+      </div>
+      <div class="chat-messages" id="chatMessages">
+        <div class="msg bot">
+          <div class="msg-avatar"><i class="ti ti-home"></i></div>
+          <div class="msg-bubble">Namaste! I'm your NestIQ property advisor. I'll find the perfect match for you in Delhi NCR. Are you looking to buy or rent?</div>
+        </div>
+      </div>
+      <div class="quick-replies" id="quickReplies">
+        <button class="qr-btn" onclick="sendReply('I want to Buy')">Buy</button>
+        <button class="qr-btn" onclick="sendReply('I want to Rent')">Rent</button>
+        <button class="qr-btn" onclick="sendReply('Just exploring options')">Just exploring</button>
+      </div>
+      <div class="chat-input-area">
+        <input class="chat-input" id="chatInput" type="text" placeholder="Type your message..."
+          onkeydown="if(event.key==='Enter') sendMessage()" />
+        <button class="send-btn" onclick="sendMessage()" aria-label="Send">
+          <i class="ti ti-send"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY NESTIQ -->
+<section class="why-section">
+  <div class="why-inner">
+    <div class="section-tag">Why NestIQ</div>
+    <h2>Built Different</h2>
+    <p>We're not a listings site. We're your property matching engine.</p>
+    <div class="features">
+      <div class="feature">
+        <i class="ti ti-robot"></i>
+        <h4>AI Qualification</h4>
+        <p>Every buyer is pre-qualified by AI before agents are contacted — saving everyone's time.</p>
+      </div>
+      <div class="feature">
+        <i class="ti ti-shield-check"></i>
+        <h4>Verified Agents Only</h4>
+        <p>Every agent on our platform is background-checked and performance-rated.</p>
+      </div>
+      <div class="feature">
+        <i class="ti ti-clock"></i>
+        <h4>24-Hour Response</h4>
+        <p>Matched agent reaches out within 24 hours — guaranteed or we find you another.</p>
+      </div>
+      <div class="feature">
+        <i class="ti ti-currency-rupee"></i>
+        <h4>Zero Cost to Buyers</h4>
+        <p>Completely free for buyers and renters. Agents pay per qualified lead.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AGENT CTA -->
+<section class="agent-section" id="agents">
+  <div class="section-tag">For Real Estate Agents</div>
+  <h2>Get Qualified Leads. Only Pay for Results.</h2>
+  <p>Stop wasting money on cold advertising. Get buyers who are ready to talk.</p>
+  <div class="agent-benefits">
+    <div class="agent-benefit"><strong>₹800–2,000</strong><span>per qualified lead</span></div>
+    <div class="agent-benefit"><strong>3x</strong><span>higher conversion rate</span></div>
+    <div class="agent-benefit"><strong>120+</strong><span>agents already onboard</span></div>
+  </div>
+  <button class="agent-btn">Join as Agent →</button>
+</section>
+
+<!-- HOW TO EARN -->
+<section class="earn-section" id="earn">
+  <div class="earn-inner">
+    <div class="section-tag" style="display:block;text-align:center;margin-bottom:1rem;">How NestIQ Makes Money</div>
+    <h2 style="text-align:center;font-family:Georgia,serif;font-size:2rem;font-weight:normal;margin-bottom:0.6rem;">3 Revenue Streams — All Automated</h2>
+    <p style="text-align:center;color:var(--text-mid);margin-bottom:3rem;font-size:0.95rem;">You don't sell properties. You sell access, leads, and visibility.</p>
+    <div class="earn-cards">
+
+      <div class="earn-card">
+        <div class="earn-number">01</div>
+        <div class="earn-icon"><i class="ti ti-user-dollar"></i></div>
+        <h3>Per Lead Sale</h3>
+        <p>Every time a buyer fills the chat form, that's a <strong>qualified lead</strong>. You sell it to a verified agent.</p>
+        <div class="earn-math">
+          <div class="earn-row"><span>1 lead sold</span><span class="earn-amt">₹1,000</span></div>
+          <div class="earn-row"><span>10 leads/day</span><span class="earn-amt">₹10,000</span></div>
+          <div class="earn-row highlight"><span>Monthly</span><span class="earn-amt">₹3,00,000</span></div>
+        </div>
+      </div>
+
+      <div class="earn-card earn-card--featured">
+        <div class="earn-badge">Most Profitable</div>
+        <div class="earn-number">02</div>
+        <div class="earn-icon"><i class="ti ti-crown"></i></div>
+        <h3>Agent Subscriptions</h3>
+        <p>Agents pay a <strong>monthly subscription</strong> to stay listed and get priority leads on your platform.</p>
+        <div class="earn-math">
+          <div class="earn-row"><span>10 agents × ₹2,999</span><span class="earn-amt">₹30k</span></div>
+          <div class="earn-row"><span>50 agents × ₹2,999</span><span class="earn-amt">₹1.5L</span></div>
+          <div class="earn-row highlight"><span>100 agents/month</span><span class="earn-amt">₹3L+</span></div>
+        </div>
+      </div>
+
+      <div class="earn-card">
+        <div class="earn-number">03</div>
+        <div class="earn-icon"><i class="ti ti-ad"></i></div>
+        <h3>Featured Listings</h3>
+        <p>Builders & agents pay extra to get their property <strong>featured at the top</strong> of search results.</p>
+        <div class="earn-math">
+          <div class="earn-row"><span>1 featured slot</span><span class="earn-amt">₹5,000/mo</span></div>
+          <div class="earn-row"><span>10 featured slots</span><span class="earn-amt">₹50,000</span></div>
+          <div class="earn-row highlight"><span>Passive income</span><span class="earn-amt">₹50k+</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="earn-total">
+      <div class="earn-total-label">Realistic Month 6 Revenue (conservative)</div>
+      <div class="earn-total-num">₹5,00,000 – ₹8,00,000 / month</div>
+      <div class="earn-total-sub">With 50 agents subscribed + 5 leads/day + 5 featured listings</div>
+    </div>
+  </div>
+</section>
+
+<!-- SUBSCRIPTION PLANS -->
+<section class="pricing-section" id="pricing">
+  <div class="pricing-inner">
+    <div class="section-tag" style="display:block;text-align:center;margin-bottom:1rem;">Agent Subscription Plans</div>
+    <h2 style="text-align:center;font-family:Georgia,serif;font-size:2rem;font-weight:normal;margin-bottom:0.5rem;">Simple, Transparent Pricing</h2>
+    <p style="text-align:center;color:var(--text-mid);margin-bottom:3rem;font-size:0.95rem;">Choose a plan. Get leads. Close deals. Cancel anytime.</p>
+
+    <div class="plans">
+
+      <div class="plan-card">
+        <div class="plan-name">Starter</div>
+        <div class="plan-price">₹999<span>/month</span></div>
+        <div class="plan-desc">Perfect for new agents just getting started.</div>
+        <ul class="plan-features">
+          <li><i class="ti ti-check"></i> 5 qualified leads/month</li>
+          <li><i class="ti ti-check"></i> Basic agent profile</li>
+          <li><i class="ti ti-check"></i> Email support</li>
+          <li><i class="ti ti-check"></i> Delhi NCR coverage</li>
+          <li class="plan-no"><i class="ti ti-x"></i> Priority lead access</li>
+          <li class="plan-no"><i class="ti ti-x"></i> Featured listing</li>
+          <li class="plan-no"><i class="ti ti-x"></i> Analytics dashboard</li>
+        </ul>
+        <button class="plan-btn">Get Started</button>
+      </div>
+
+      <div class="plan-card plan-card--popular">
+        <div class="plan-popular-badge">Most Popular</div>
+        <div class="plan-name">Pro</div>
+        <div class="plan-price">₹2,999<span>/month</span></div>
+        <div class="plan-desc">For serious agents who want consistent leads.</div>
+        <ul class="plan-features">
+          <li><i class="ti ti-check"></i> 20 qualified leads/month</li>
+          <li><i class="ti ti-check"></i> Verified agent badge</li>
+          <li><i class="ti ti-check"></i> Priority support</li>
+          <li><i class="ti ti-check"></i> Delhi NCR + Nearby cities</li>
+          <li><i class="ti ti-check"></i> Priority lead access</li>
+          <li><i class="ti ti-check"></i> 1 featured listing</li>
+          <li class="plan-no"><i class="ti ti-x"></i> Analytics dashboard</li>
+        </ul>
+        <button class="plan-btn plan-btn--primary">Get Started</button>
+      </div>
+
+      <div class="plan-card">
+        <div class="plan-name">Elite</div>
+        <div class="plan-price">₹5,999<span>/month</span></div>
+        <div class="plan-desc">For top agents and agencies scaling fast.</div>
+        <ul class="plan-features">
+          <li><i class="ti ti-check"></i> Unlimited leads</li>
+          <li><i class="ti ti-check"></i> Top agent profile</li>
+          <li><i class="ti ti-check"></i> Dedicated account manager</li>
+          <li><i class="ti ti-check"></i> Pan-India coverage</li>
+          <li><i class="ti ti-check"></i> First priority leads</li>
+          <li><i class="ti ti-check"></i> 3 featured listings</li>
+          <li><i class="ti ti-check"></i> Full analytics dashboard</li>
+        </ul>
+        <button class="plan-btn">Get Started</button>
+      </div>
+
+    </div>
+
+    <div class="pricing-note">
+      <i class="ti ti-shield-check"></i>
+      No setup fee. No hidden charges. Cancel anytime. GST extra.
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <strong>NestIQ</strong> · Delhi NCR's AI Property Advisor<br/>
+  <span style="margin-top:0.5rem;display:block;">© 2025 NestIQ. All rights reserved.</span>
+</footer>
+
+<script>
+  /* ── CHAT LOGIC ── */
+  const flow = [
+    { trigger: ['buy','buying'], msg: "Great choice! What's your approximate budget?", replies: ['Under ₹50L', '₹50L – ₹1Cr', '₹1Cr – ₹2Cr', '₹2Cr+'] },
+    { trigger: ['rent','renting'], msg: "Perfect! What's your monthly rent budget?", replies: ['Under ₹15k', '₹15k – ₹30k', '₹30k – ₹60k', '₹60k+'] },
+    { trigger: ['exploring'], msg: "No worries! Which area in Delhi NCR interests you most?", replies: ['Gurgaon', 'Noida', 'South Delhi', 'Dwarka'] },
+    { trigger: ['under ₹50l','50l'], msg: "Got it! How many bedrooms do you need?", replies: ['1 BHK', '2 BHK', '3 BHK', '3+ BHK'] },
+    { trigger: ['1cr','2cr','₹2cr','₹1cr'], msg: "Excellent budget! Which area are you considering?", replies: ['Gurgaon', 'Noida', 'South Delhi', 'Dwarka'] },
+    { trigger: ['under ₹15k','₹15k','₹30k','₹60k'], msg: "Perfect! Which area in Delhi NCR do you prefer?", replies: ['Gurgaon', 'Noida', 'South Delhi', 'Dwarka'] },
+    { trigger: ['1 bhk','2 bhk','3 bhk','3+ bhk'], msg: "Nice! Which area in Delhi NCR do you prefer?", replies: ['Gurgaon', 'Noida', 'South Delhi', 'Dwarka'] },
+    { trigger: ['gurgaon','noida','south delhi','dwarka'], msg: "When are you planning to move?", replies: ['ASAP', '1–3 months', '3–6 months', 'Just planning'] },
+    { trigger: ['asap','1–3','3–6','just planning'], msg: "Almost done! What's your name and phone number so our verified agent can reach you?", replies: [] },
+  ];
+
+  const fallback = "Could you tell me a bit more — are you looking to buy or rent, what's your budget, and which area?";
+  const thankMsg = "Thank you! Our verified agent will contact you within 24 hours with the best matched properties. You're all set!";
+  let phoneStep = false;
+
+  function appendMsg(text, type) {
+    const wrap = document.getElementById('chatMessages');
+    const d = document.createElement('div');
+    d.className = 'msg ' + type;
+    if (type === 'bot') {
+      d.innerHTML = `<div class="msg-avatar"><i class="ti ti-home"></i></div><div class="msg-bubble">${text}</div>`;
+    } else {
+      d.innerHTML = `<div class="msg-bubble">${text}</div>`;
+    }
+    wrap.appendChild(d);
+    wrap.scrollTop = wrap.scrollHeight;
+  }
+
+  function showTyping() {
+    const wrap = document.getElementById('chatMessages');
+    const d = document.createElement('div');
+    d.className = 'msg bot';
+    d.id = 'typingIndicator';
+    d.innerHTML = `<div class="msg-avatar"><i class="ti ti-home"></i></div><div class="msg-bubble"><div class="typing"><span></span><span></span><span></span></div></div>`;
+    wrap.appendChild(d);
+    wrap.scrollTop = wrap.scrollHeight;
+  }
+
+  function removeTyping() {
+    const t = document.getElementById('typingIndicator');
+    if (t) t.remove();
+  }
+
+  function setQuickReplies(replies) {
+    const qr = document.getElementById('quickReplies');
+    qr.innerHTML = '';
+    replies.forEach(r => {
+      const b = document.createElement('button');
+      b.className = 'qr-btn';
+      b.textContent = r;
+      b.onclick = () => sendReply(r);
+      qr.appendChild(b);
+    });
+  }
+
+  function processInput(text) {
+    const lower = text.toLowerCase();
+    if (phoneStep) {
+      showTyping();
+      setTimeout(() => {
+        removeTyping();
+        appendMsg(thankMsg, 'bot');
+        setQuickReplies([]);
+      }, 1200);
+      return;
+    }
+    let matched = null;
+    for (const f of flow) {
+      if (f.trigger.some(t => lower.includes(t))) { matched = f; break; }
+    }
+    showTyping();
+    setTimeout(() => {
+      removeTyping();
+      if (matched) {
+        appendMsg(matched.msg, 'bot');
+        setQuickReplies(matched.replies);
+        if (matched.replies.length === 0) phoneStep = true;
+      } else {
+        appendMsg(fallback, 'bot');
+        setQuickReplies(['Buy', 'Rent', 'Just exploring']);
+      }
+    }, 950);
+  }
+
+  function sendReply(text) {
+    appendMsg(text, 'user');
+    setQuickReplies([]);
+    processInput(text);
+  }
+
+  function sendMessage() {
+    const inp = document.getElementById('chatInput');
+    const text = inp.value.trim();
+    if (!text) return;
+    inp.value = '';
+    appendMsg(text, 'user');
+    setQuickReplies([]);
+    processInput(text);
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NestIQ — Agent Dashboard</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --brand: #1D9E75;
+      --brand-dark: #0F6E56;
+      --brand-light: #E1F5EE;
+      --text-dark: #2C2C2A;
+      --text-mid: #5F5E5A;
+      --bg: #f5f5f3;
+      --white: #ffffff;
+      --border: rgba(0,0,0,0.08);
+      --radius: 10px;
+    }
+    body { font-family: 'Helvetica Neue', Arial, sans-serif; background: var(--bg); color: var(--text-dark); }
+
+    /* SIDEBAR */
+    .layout { display: flex; min-height: 100vh; }
+    .sidebar {
+      width: 220px;
+      background: var(--text-dark);
+      padding: 1.5rem 1rem;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .sidebar-logo {
+      font-family: Georgia, serif;
+      font-size: 1.3rem;
+      color: white;
+      margin-bottom: 2rem;
+      padding: 0 0.5rem;
+    }
+    .sidebar-logo span { color: var(--brand); }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0.65rem 0.75rem;
+      border-radius: 8px;
+      color: rgba(255,255,255,0.6);
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      text-decoration: none;
+    }
+    .nav-item:hover, .nav-item.active {
+      background: rgba(255,255,255,0.1);
+      color: white;
+    }
+    .nav-item.active { color: #9FE1CB; }
+    .nav-item i { font-size: 18px; }
+
+    /* MAIN */
+    .main { flex: 1; padding: 2rem; overflow-x: hidden; }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+    }
+    .topbar h1 { font-size: 1.4rem; font-weight: 600; }
+    .topbar p { font-size: 0.85rem; color: var(--text-mid); margin-top: 2px; }
+    .refresh-btn {
+      background: var(--brand);
+      color: white;
+      border: none;
+      padding: 9px 18px;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s;
+    }
+    .refresh-btn:hover { background: var(--brand-dark); }
+
+    /* STATS */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .stat-card {
+      background: var(--white);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+    }
+    .stat-card .s-label { font-size: 0.78rem; color: var(--text-mid); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px; }
+    .stat-card .s-num { font-size: 2rem; font-weight: 700; font-family: Georgia, serif; color: var(--text-dark); }
+    .stat-card .s-icon { font-size: 20px; color: var(--brand); margin-bottom: 0.5rem; }
+    .stat-card.highlight { background: var(--brand); border-color: var(--brand); }
+    .stat-card.highlight .s-label { color: rgba(255,255,255,0.7); }
+    .stat-card.highlight .s-num { color: white; }
+    .stat-card.highlight .s-icon { color: rgba(255,255,255,0.8); }
+
+    /* LEADS TABLE */
+    .section-card {
+      background: var(--white);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .section-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 0.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .section-header h2 { font-size: 1rem; font-weight: 600; }
+    .filter-tabs { display: flex; gap: 0.5rem; }
+    .filter-tab {
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      background: var(--bg);
+      color: var(--text-mid);
+      transition: background 0.15s, color 0.15s;
+    }
+    .filter-tab.active { background: var(--brand); color: white; }
+
+    table { width: 100%; border-collapse: collapse; }
+    thead { background: var(--bg); }
+    th {
+      text-align: left;
+      padding: 0.75rem 1.5rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-mid);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    td {
+      padding: 1rem 1.5rem;
+      font-size: 0.88rem;
+      border-bottom: 0.5px solid var(--border);
+      vertical-align: middle;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #fafaf8; }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+    .badge-new { background: #FEF3C7; color: #92400E; }
+    .badge-contacted { background: #DBEAFE; color: #1E40AF; }
+    .badge-converted { background: var(--brand-light); color: var(--brand-dark); }
+
+    .status-select {
+      border: 0.5px solid var(--border);
+      border-radius: 6px;
+      padding: 5px 8px;
+      font-size: 0.8rem;
+      background: white;
+      cursor: pointer;
+      color: var(--text-dark);
+      outline: none;
+    }
+    .status-select:focus { border-color: var(--brand); }
+
+    .phone-link { color: var(--brand); text-decoration: none; font-weight: 500; }
+    .phone-link:hover { text-decoration: underline; }
+
+    .loading {
+      text-align: center;
+      padding: 3rem;
+      color: var(--text-mid);
+      font-size: 0.9rem;
+    }
+    .loading i { font-size: 32px; color: var(--brand); display: block; margin-bottom: 0.5rem; animation: spin 1s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .empty {
+      text-align: center;
+      padding: 3rem;
+      color: var(--text-mid);
+    }
+    .empty i { font-size: 40px; display: block; margin-bottom: 1rem; opacity: 0.4; }
+
+    .intent-icon { font-size: 16px; margin-right: 4px; }
+    .time-ago { color: var(--text-mid); font-size: 0.8rem; }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-logo">Nest<span>IQ</span></div>
+    <a class="nav-item active" href="#">
+      <i class="ti ti-layout-dashboard"></i> Dashboard
+    </a>
+    <a class="nav-item" href="#">
+      <i class="ti ti-users"></i> All Leads
+    </a>
+    <a class="nav-item" href="#">
+      <i class="ti ti-building-estate"></i> Agents
+    </a>
+    <a class="nav-item" href="#">
+      <i class="ti ti-chart-bar"></i> Analytics
+    </a>
+    <a class="nav-item" href="nestiq-landing.html" style="margin-top:auto;">
+      <i class="ti ti-arrow-left"></i> Back to Site
+    </a>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <div>
+        <h1>Lead Dashboard</h1>
+        <p id="lastUpdated">Loading...</p>
+      </div>
+      <button class="refresh-btn" onclick="loadData()">
+        <i class="ti ti-refresh"></i> Refresh
+      </button>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-row">
+      <div class="stat-card highlight">
+        <div class="s-icon"><i class="ti ti-users"></i></div>
+        <div class="s-label">Total Leads</div>
+        <div class="s-num" id="statTotal">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="s-icon"><i class="ti ti-bell"></i></div>
+        <div class="s-label">New Leads</div>
+        <div class="s-num" id="statNew">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="s-icon"><i class="ti ti-phone"></i></div>
+        <div class="s-label">Contacted</div>
+        <div class="s-num" id="statContacted">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="s-icon"><i class="ti ti-circle-check"></i></div>
+        <div class="s-label">Converted</div>
+        <div class="s-num" id="statConverted">—</div>
+      </div>
+    </div>
+
+    <!-- LEADS TABLE -->
+    <div class="section-card">
+      <div class="section-header">
+        <h2>All Leads</h2>
+        <div class="filter-tabs">
+          <button class="filter-tab active" onclick="filterLeads('all', this)">All</button>
+          <button class="filter-tab" onclick="filterLeads('new', this)">New</button>
+          <button class="filter-tab" onclick="filterLeads('contacted', this)">Contacted</button>
+          <button class="filter-tab" onclick="filterLeads('converted', this)">Converted</button>
+        </div>
+      </div>
+      <div id="tableContainer">
+        <div class="loading"><i class="ti ti-loader"></i> Leads load ho rahi hain...</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const SUPABASE_URL = 'https://qrbftonfvrtlwwerbaln.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_QEelglagsL-Pp5BQO9xPqA_ZM5RZEF-';
+
+  let allLeads = [];
+  let currentFilter = 'all';
+
+  function timeAgo(dateStr) {
+    const diff = Date.now() - new Date(dateStr).getTime();
+    const mins = Math.floor(diff / 60000);
+    const hours = Math.floor(mins / 60);
+    const days = Math.floor(hours / 24);
+    if (mins < 1) return 'Abhi abhi';
+    if (mins < 60) return `${mins} min pehle`;
+    if (hours < 24) return `${hours} ghante pehle`;
+    return `${days} din pehle`;
+  }
+
+  function getBadge(status) {
+    if (status === 'new') return '<span class="badge badge-new">New</span>';
+    if (status === 'contacted') return '<span class="badge badge-contacted">Contacted</span>';
+    if (status === 'converted') return '<span class="badge badge-converted">Converted ✓</span>';
+    return `<span class="badge">${status}</span>`;
+  }
+
+  async function updateStatus(id, status) {
+    await fetch(`${SUPABASE_URL}/rest/v1/leads?id=eq.${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`
+      },
+      body: JSON.stringify({ status })
+    });
+    loadData();
+  }
+
+  function renderTable(leads) {
+    const container = document.getElementById('tableContainer');
+    if (!leads.length) {
+      container.innerHTML = `<div class="empty"><i class="ti ti-inbox"></i>Koi lead nahi aayi abhi tak.<br/>Share karo apni website!</div>`;
+      return;
+    }
+    container.innerHTML = `
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Intent</th>
+            <th>Budget</th>
+            <th>Area</th>
+            <th>BHK</th>
+            <th>Timeline</th>
+            <th>Status</th>
+            <th>Aaya Kab</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${leads.map(l => `
+            <tr>
+              <td><strong>${l.name || '—'}</strong></td>
+              <td><a class="phone-link" href="tel:${l.phone}">${l.phone || '—'}</a></td>
+              <td>${l.intent === 'buy' ? '🏠 Buy' : l.intent === 'rent' ? '🔑 Rent' : '—'}</td>
+              <td>${l.budget || '—'}</td>
+              <td>${l.area || '—'}</td>
+              <td>${l.bhk || '—'}</td>
+              <td>${l.timeline || '—'}</td>
+              <td>
+                <select class="status-select" onchange="updateStatus('${l.id}', this.value)">
+                  <option value="new" ${l.status==='new'?'selected':''}>New</option>
+                  <option value="contacted" ${l.status==='contacted'?'selected':''}>Contacted</option>
+                  <option value="converted" ${l.status==='converted'?'selected':''}>Converted</option>
+                </select>
+              </td>
+              <td class="time-ago">${timeAgo(l.created_at)}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `;
+  }
+
+  function filterLeads(filter, btn) {
+    currentFilter = filter;
+    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    const filtered = filter === 'all' ? allLeads : allLeads.filter(l => l.status === filter);
+    renderTable(filtered);
+  }
+
+  async function loadData() {
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/leads?select=*&order=created_at.desc`, {
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`
+        }
+      });
+      allLeads = await res.json();
+
+      // Stats update karo
+      document.getElementById('statTotal').textContent = allLeads.length;
+      document.getElementById('statNew').textContent = allLeads.filter(l => l.status === 'new').length;
+      document.getElementById('statContacted').textContent = allLeads.filter(l => l.status === 'contacted').length;
+      document.getElementById('statConverted').textContent = allLeads.filter(l => l.status === 'converted').length;
+      document.getElementById('lastUpdated').textContent = `Last updated: ${new Date().toLocaleTimeString('en-IN')}`;
+
+      // Table render karo
+      const filtered = currentFilter === 'all' ? allLeads : allLeads.filter(l => l.status === currentFilter);
+      renderTable(filtered);
+
+    } catch (err) {
+      document.getElementById('tableContainer').innerHTML = `<div class="empty"><i class="ti ti-alert-circle"></i>Data load nahi hua. Supabase check karo.</div>`;
+    }
+  }
+
+  // Page load pe data laao
+  loadData();
+  // Har 30 second mein auto refresh
+  setInterval(loadData, 30000);
+</script>
+</body>
+</html>
